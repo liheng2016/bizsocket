@@ -14,16 +14,18 @@
 - 缓存
 - 拦截器
 - 支持rxjava，提供类似于retrofit的支持
+- 提供rxjava和rxjava2两种使用方式
 
 ## 使用方式
+### RxJava2
 
 Maven
 
 ```
 <dependency>
   <groupId>com.github.typ0520</groupId>
-  <artifactId>bizsocket-rx</artifactId>
-  <version>1.0.0</version>
+  <artifactId>bizsocket-rx2</artifactId>
+  <version>2.0.0</version>
 </dependency>
 ```
 
@@ -37,7 +39,32 @@ buildscript {
 }
  
 dependencies {
-	compile 'com.github.typ0520:bizsocket-rx:1.0.0'
+	compile 'com.github.typ0520:bizsocket-rx2:2.0.0'
+}
+```
+### RxJava
+
+Maven
+
+```
+<dependency>
+  <groupId>com.github.typ0520</groupId>
+  <artifactId>bizsocket-rx1</artifactId>
+  <version>2.0.0</version>
+</dependency>
+```
+
+or Gradle
+
+```gradle
+buildscript {
+	repositories {
+	   jcenter()
+	}
+}
+ 
+dependencies {
+	compile 'com.github.typ0520:bizsocket-rx1:2.0.0'
 }
 ```
 
@@ -223,7 +250,7 @@ public static void main(String[] args) {
 	//如果想用rxjava的形式调用也是支持的,提供了类似于retrofit通过动态代理创建的service类来调用
         BizSocketRxSupport rxSupport = new BizSocketRxSupport.Builder()
                 .requestConverter(new JSONRequestConverter())
-                .requestConverter(new JSONRequestConverter())
+                .responseConverter(new JSONResponseConverter())
                 .bizSocket(client)
                 .build();
         SampleService service = rxSupport.create(SampleService.class);
@@ -234,6 +261,7 @@ public static void main(String[] args) {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        //rxjava范例,使用rxjava2需修改Subscriber
         service.queryOrderList(params).subscribe(new Subscriber<JSONObject>() {
             @Override
             public void onCompleted() {
